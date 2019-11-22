@@ -183,8 +183,8 @@ def set_drug_indicators(encounters, meds):
                             encounters[k]['opioid_ind'] = 1
                 else:
                     # If prescription has no stop date,
-                    # assume it was a 30 day supply
-                    if -1 < (encounters[k]['start'] - start).days < 30:
+                    # assume its ongoing
+                    if start < encounters[k]['start']:
                         encounters[k]['drug_count'] += 1
                         if check_opioid(descr):
                             encounters[k]['opioid_ind'] = 1
@@ -196,7 +196,7 @@ def write_solution_to_csv(encounters):
     with open('file.csv', 'w') as file:
         file.write("PATIENT_ID,ENCOUNTER_ID,HOSPITAL_ENCOUNTER_DATE,AGE_AT_VISIT,DEATH_AT_VISIT_IND,COUNT_CURRENT_MEDS,CURRENT_OPIOID_IND,READMISSION_90_DAY_IND,READMISSION_30_DAY_IND,FIRST_READMISSION_DATE\n")
         for id, en in encounters.items():
-            file.write((f"{en['patient'].id},{id},{en['start']},{en['patient_age']},{en['death_ind']},{en['drug_count']},{en['opioid_ind']},{en['readd_90']},{en['readd_30']},{en['readd_date']}\n"))
+            file.write(f"{en['patient'].id},{id},{en['start']},{en['patient_age']},{en['death_ind']},{en['drug_count']},{en['opioid_ind']},{en['readd_90']},{en['readd_30']},{en['readd_date']}\n")
     print("file.csv created")
 
 
