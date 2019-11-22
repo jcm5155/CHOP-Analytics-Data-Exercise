@@ -60,7 +60,7 @@ for i in range(len(de)):
             if 18 < patient_age < 36:
                 # valid encounter
                 valid_case += 1
-                # crete new encounter dict, fill in default values for things we haven't checked yet
+                # create new encounter dict, fill in default values for things we haven't checked yet
                 encounters[encounter_id] = {'patient': patient, 
                                             'patient_age': patient_age,
                                             'start': de['START'][i],
@@ -150,4 +150,4 @@ with open('file.csv', 'w') as file:
         file.write(f"{en['patient'].id},{id},{en['start']},{en['patient_age']},{en['death_ind']},{en['drug_count']},{en['opioid_ind']},{en['readd_90']},{en['readd_30']},{en['readd_date']}\n")
         write_count += 1
         print(f"encounter {write_count}/{len(encounters)} written to file.csv")
-    print("we done fam")
+    print("file.csv created")
