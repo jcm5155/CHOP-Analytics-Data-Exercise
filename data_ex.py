@@ -32,9 +32,9 @@ medicine_csv = pd.read_csv("datasets/medications.csv",
                         parse_dates=['START', 'STOP'])
 
 # Regex patterns for check_opioid()
-hydro_pattern = compile(r"(Hydromorphone)")
-fent_pattern = compile(r"(Fentanyl)")
-oxy_pattern = compile(r"(Oxycodone-acetaminophen)")
+hydro_pattern = compile(r"(Hydromorphone 325 MG)")
+fent_pattern = compile(r"(Fentanyl 100 MCG)")
+oxy_pattern = compile(r"(Oxycodone-acetaminophen 100ML)")
 
 
 def check_opioid(descr):
