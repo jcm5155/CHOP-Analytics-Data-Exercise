@@ -31,24 +31,24 @@ medicine_csv = pd.read_csv("datasets/medications.csv",
                         usecols=['START', 'STOP', 'PATIENT', 'DESCRIPTION'],
                         parse_dates=['START', 'STOP'])
 
-# Regex patterns for check_opioid()
-hydro_pattern = compile(r"(Hydromorphone 325 MG)")
+# Regex patterns for is_opioid()
 fent_pattern = compile(r"(Fentanyl 100 MCG)")
+hydro_pattern = compile(r"(Hydromorphone 325 MG)")
 oxy_pattern = compile(r"(Oxycodone-acetaminophen 100ML)")
 
 
-def check_opioid(descr):
+def is_opioid(descr):
     """
     Returns True if any relevant opioid names
     are found in medicine description
-    Opioids to find: (1) Hydromorphone
-                     (2) Fentanyl
-                     (3) Oxycodone-acetaminophen
+    Opioids to find: (1) Fentanyl 100 MCG
+                     (2) Hydromorphone 325 MG
+                     (3) Oxycodone-acetaminophen 100ML
     """
-    is_hydro = findall(hydro_pattern, descr)
     is_fent = findall(fent_pattern, descr)
+    is_hydro = findall(hydro_pattern, descr)
     is_oxy = findall(oxy_pattern, descr)
-    if is_oxy or is_fent or is_hydro:
+    if is_fent or is_hydro or is_oxy:
         return True
     return False
 
@@ -58,7 +58,7 @@ def build_patient_dict():
     Build dictionary of all patients
     {patient id : Patient()}
     """
-    print('building patient list...')
+    print('building patient dict...')
     patients = {}
     for i in range(len(patient_csv)):
         patients[patient_csv['Id'][i]] = (Patient(patient_csv['Id'][i],
@@ -176,17 +176,19 @@ def set_drug_indicators(encounters, meds):
             curr_pt_meds = meds[v['patient'].id]
             for med in curr_pt_meds:
                 descr, start, stop = med[0], med[1], med[2]
+                # If prescription has a stop date,
+                # check if start < encounter date < stop
                 if not pd.isnull(stop):
                     if start < encounters[k]['start'] < stop:
                         encounters[k]['drug_count'] += 1
-                        if check_opioid(descr):
+                        if is_opioid(descr):
                             encounters[k]['opioid_ind'] = 1
                 else:
                     # If prescription has no stop date,
                     # assume its ongoing
                     if start < encounters[k]['start']:
                         encounters[k]['drug_count'] += 1
-                        if check_opioid(descr):
+                        if is_opioid(descr):
                             encounters[k]['opioid_ind'] = 1
     return encounters
 
