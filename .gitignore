@@ -124,3 +124,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .DS_Store
+data-dictionary.xlsx
+datasets/allergies.csv
+datasets/encounters.csv
+datasets/medications.csv
+datasets/patients.csv
+datasets/procedures.csv
