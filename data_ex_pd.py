@@ -2,21 +2,13 @@ import pandas as pd
 import numpy as np
 
 patients = pd.read_csv("datasets/patients.csv",
-                       usecols=['Id', 'BIRTHDATE', 'DEATHDATE'],
-                       parse_dates=['BIRTHDATE', 'DEATHDATE'],
-                       index_col='Id')
+                        usecols=['Id', 'BIRTHDATE', 'DEATHDATE'],
+                        parse_dates=['BIRTHDATE', 'DEATHDATE'],
+                        index_col='Id')
 
-encounters = pd.read_csv(
-    "datasets/encounters.csv",
-    usecols=[
-        'PATIENT',
-        'Id',
-        'START',
-        'STOP',
-        'REASONCODE'],
-    parse_dates=[
-        'START',
-        'STOP'])
+encounters = pd.read_csv("datasets/encounters.csv",
+                         usecols=['PATIENT','Id','START','STOP','REASONCODE'],
+                         parse_dates=['START','STOP'])
 
 medicines = pd.read_csv("datasets/medications.csv",
                         usecols=['START', 'STOP', 'PATIENT', 'DESCRIPTION'],
@@ -93,8 +85,7 @@ encounters.set_index('ENCOUNTER_ID', inplace=True)
 for i in enc_grouped:
     if len(i) > 1:
         for j in range(len(i) - 1):
-            next_diff = encounters.HOSPITAL_ENCOUNTER_DATE[i[j + 1]
-                                                           ] - encounters.STOP[i[j]]
+            next_diff = encounters.HOSPITAL_ENCOUNTER_DATE[i[j + 1]] - encounters.STOP[i[j]]
             if next_diff < np.timedelta64(91, 'D'):
                 readd_dates[i[j]] = encounters.HOSPITAL_ENCOUNTER_DATE[i[j + 1]]
                 if next_diff < np.timedelta64(31, 'D'):
