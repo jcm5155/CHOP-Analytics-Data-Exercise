@@ -5,6 +5,7 @@ import pandas as pd
 
 class Patient():
     """Represents a single patient"""
+
     def __init__(self, _id, birth_date, death_date):
         self.id = _id
         self.birth_date = birth_date
@@ -25,8 +26,8 @@ class Patient():
 #   'DEATHDATE' | date/NaT | Patient's date of death
 
 patient_csv = pd.read_csv("datasets/patients.csv",
-                        usecols=['Id', 'BIRTHDATE', 'DEATHDATE'],
-                        parse_dates=['BIRTHDATE', 'DEATHDATE'])
+                          usecols=['Id', 'BIRTHDATE', 'DEATHDATE'],
+                          parse_dates=['BIRTHDATE', 'DEATHDATE'])
 
 # From encounters.csv:
 #   COLUMN       | TYPE    | DESCRIPTION
@@ -36,9 +37,17 @@ patient_csv = pd.read_csv("datasets/patients.csv",
 #   'PATIENT'    | string  | Identifier for encounter's affected patient
 #   'REASONCODE' | integer | Identifier for encounter reason
 
-encounter_csv = pd.read_csv("datasets/encounters.csv",
-                        usecols=['Id', 'START', 'STOP', 'PATIENT', 'REASONCODE'],
-                        parse_dates=['START', 'STOP'])
+encounter_csv = pd.read_csv(
+    "datasets/encounters.csv",
+    usecols=[
+        'Id',
+        'START',
+        'STOP',
+        'PATIENT',
+        'REASONCODE'],
+    parse_dates=[
+        'START',
+        'STOP'])
 # From medications.csv:
 #   COLUMN        | TYPE     | DESCRIPTION
 #   'START'       | date     | Prescription's start date
@@ -47,8 +56,8 @@ encounter_csv = pd.read_csv("datasets/encounters.csv",
 #   'DESCRIPTION' | string   | Name of prescribed drug(s)
 
 medicine_csv = pd.read_csv("datasets/medications.csv",
-                        usecols=['START', 'STOP', 'PATIENT', 'DESCRIPTION'],
-                        parse_dates=['START', 'STOP'])
+                           usecols=['START', 'STOP', 'PATIENT', 'DESCRIPTION'],
+                           parse_dates=['START', 'STOP'])
 
 
 def build_patient_dict():
@@ -60,8 +69,8 @@ def build_patient_dict():
     patient_dict = {}
     for i in range(len(patient_csv)):
         patient_dict[patient_csv['Id'][i]] = (Patient(patient_csv['Id'][i],
-                                                  patient_csv['BIRTHDATE'][i],
-                                                  patient_csv['DEATHDATE'][i]))
+                                                      patient_csv['BIRTHDATE'][i],
+                                                      patient_csv['DEATHDATE'][i]))
     return patient_dict
 
 
@@ -81,7 +90,8 @@ def build_encounter_dict(patient_dict):
         if encounter_csv['REASONCODE'][i] == 55680006 and encounter_csv['START'][i] > valid_date_start:
             curr_pt = patient_dict[encounter_csv['PATIENT'][i]]
             curr_enc_stop = encounter_csv['STOP'][i]
-            curr_pt_age = relativedelta(curr_enc_stop, curr_pt.birth_date).years
+            curr_pt_age = relativedelta(
+                curr_enc_stop, curr_pt.birth_date).years
             # Check condition (3)
             if 18 < curr_pt_age < 36:
                 curr_enc_id = encounter_csv['Id'][i]
@@ -92,16 +102,16 @@ def build_encounter_dict(patient_dict):
                     curr_pt_death_ind = 0
                 # Create new encounter dict
                 # Fill in default values for things we haven't checked yet
-                encounters[curr_enc_id] =  {'death_ind': curr_pt_death_ind,
-                                            'patient': curr_pt,
-                                            'patient_age': curr_pt_age,
-                                            'start': curr_enc_start,
-                                            'stop': curr_enc_stop,
-                                            'drug_count': 0,
-                                            'opioid_ind': 0,
-                                            'readd_90': 0,
-                                            'readd_30': 0,
-                                            'readd_date': 'NA',}
+                encounters[curr_enc_id] = {'death_ind': curr_pt_death_ind,
+                                           'patient': curr_pt,
+                                           'patient_age': curr_pt_age,
+                                           'start': curr_enc_start,
+                                           'stop': curr_enc_stop,
+                                           'drug_count': 0,
+                                           'opioid_ind': 0,
+                                           'readd_90': 0,
+                                           'readd_30': 0,
+                                           'readd_date': 'NA', }
                 # Append current encounter's start date to
                 # current patient's self.encs
                 curr_pt.encs.append(encounters[curr_enc_id]['start'])
@@ -167,14 +177,14 @@ def set_readmission_indicators(encounters):
     for e in encounters.values():
         sorted_pt_encs = sorted(e['patient'].encs)
         if len(sorted_pt_encs) > 1:
-            for i in range(len(sorted_pt_encs)-1):
+            for i in range(len(sorted_pt_encs) - 1):
                 if sorted_pt_encs[i] == e['start']:
-                    readd_diff = (sorted_pt_encs[i+1] - e['stop']).days
+                    readd_diff = (sorted_pt_encs[i + 1] - e['stop']).days
                     if readd_diff < 91:
                         e['readd_90'] = 1
                         if readd_diff < 31:
                             e['readd_30'] = 1
-                        e['readd_date'] = sorted_pt_encs[i+1]
+                        e['readd_date'] = sorted_pt_encs[i + 1]
     return encounters
 
 
@@ -215,7 +225,7 @@ def set_drug_indicators(encounters, medicine_dict):
                     # meets opioid_ind conditions
                     if (fent_str in med_descr
                         or hydro_str in med_descr
-                        or oxy_str in med_descr):
+                            or oxy_str in med_descr):
                         # Change opioid indicator (default is 0)
                         encounters[enc_id]['opioid_ind'] = 1
     return encounters
