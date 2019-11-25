@@ -101,5 +101,5 @@ values = ({'COUNT_CURRENT_MEDS': 0, 'CURRENT_OPIOID_IND': 0, 'DEATH_AT_VISIT_IND
            'READMISSION_90_DAY_IND': 0, 'READMISSION_30_DAY_IND': 0, 'FIRST_READMISSION_DATE': 'NA'})
 encounters = encounters.fillna(value=values)
 
-# Write dataframe to solution.csv
-encounters.to_csv(r'solution.csv', index=False)
+# Write dataframe to data_ex_pd_solution.csv
+encounters.to_csv(r'data_ex_pd_solution.csv', index=False)
