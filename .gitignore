@@ -130,4 +130,3 @@ datasets/encounters.csv
 datasets/medications.csv
 datasets/patients.csv
 datasets/procedures.csv
-*.ipynb
