@@ -15144,26 +15144,63 @@ div#notebook {
 <table>
 <thead><tr>
 <th>Field name</th>
-<th>Field Description</th>
+<th>Field Description.</th>
 <th>Data Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td></td>
+<td><code>PATIENT_ID</code></td>
+<td>Patient identifier.</td>
+<td>Character String</td>
+</tr>
+<tr>
+<td><code>ENCOUNTER_ID</code></td>
+<td>Visit identifier.</td>
+<td>Character String</td>
+</tr>
+<tr>
+<td><code>HOSPITAL_ENCOUNTER_DATE</code></td>
+<td>Beginning of hospital encounter date.</td>
+<td>Date/time</td>
+</tr>
+<tr>
+<td><code>AGE_AT_VISIT</code></td>
+<td>Patient age at admission.</td>
+<td>Num</td>
+</tr>
+<tr>
+<td><code>DEATH_AT_VISIT_IND</code></td>
+<td>Indicator if the patient died during the drug overdose encounter.</td>
+<td>Date/time (Leave N/A if patient has not died)</td>
+</tr>
+<tr>
+<td><code>COUNT_CURRENT_MEDS</code></td>
+<td>Count of active medications at the start of the drug overdose encounter.</td>
+<td>Num</td>
+</tr>
+<tr>
+<td><code>CURRENT_OPIOID_IND</code></td>
+<td>Indicator if the patient had at least one active medication at the start of the overdose encounter that is on the Opioids List</td>
+<td>0/1</td>
+</tr>
+<tr>
+<td><code>READMISSION_90_DAY_IND</code></td>
+<td>Indicator if the visit resulted in a subsequent readmission within 90 days</td>
+<td>0/1</td>
+</tr>
+<tr>
+<td><code>READMISSION_30_DAY_IND</code></td>
+<td>Indicator if the visit resulted in a subsequent readmission within 30 days</td>
+<td>0/1</td>
+</tr>
+<tr>
+<td><code>FIRST_READMISSION_DATE</code></td>
+<td>Date of the first readmission for drug overdose within 90 days.</td>
+<td>Date/time (Leave N/A if no readmissions for drug overdose within 90 days)</td>
 </tr>
 </tbody>
 </table>
-<p><code>PATIENT_ID</code>    |Patient identifier |Character String
-<code>ENCOUNTER_ID</code>|Visit identifier| Character string
-<code>HOSPITAL_ENCOUNTER_DATE</code>|  Beginning of hospital encounter date    |Date/time
-<code>AGE_AT_VISIT</code>  |Patient age at admission   |Num
-<code>DEATH_AT_VISIT_IND</code>    |Indicator if the patient died during the drug overdose encounter. |Leave N/A if patient has not died,  |0 /1
-<code>COUNT_CURRENT_MEDS</code>    |Count of active medications at the start of the drug overdose encounter|   Num
-<code>CURRENT_OPIOID_IND</code>|   if the patient had at least one active medication at the start of the overdose encounter that is on the Opioids List (provided below)|  0/1
-<code>READMISSION_90_DAY_IND</code>|   Indicator if the visit resulted in a subsequent readmission within 90 days| 0/1
-<code>READMISSION_30_DAY_IND</code>|   Indicator if the visit resulted in a subsequent readmission within 30 days| 0/1
-<code>FIRST_READMISSION_DATE</code>|   Date of the first readmission for drug overdose within 90 days.| Leave N/A if no readmissions for drug overdose within 90 days.</p>
 <hr>
 <p>We have all the required data in our encounters dataframe already, so let's prepare our data for export. This will take 3 steps:</p>
 <ol>
